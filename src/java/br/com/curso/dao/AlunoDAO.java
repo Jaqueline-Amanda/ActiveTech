@@ -28,7 +28,8 @@ public class AlunoDAO implements GenericDAO{
         try {
             Aluno oAluno = (Aluno) objeto;
             if (oAluno.getIdAluno()==0) {
-                int idAluno = this.verificarRA(oAluno.getRa());
+                  int idAluno = this.verificarCpf(oAluno.getCpf());
+                /*int idAluno = this.verificarRA(oAluno.getRa());*/
                 if (idAluno==0) {
                     retorno = this.inserir(oAluno);
                 }else{
@@ -48,14 +49,14 @@ public class AlunoDAO implements GenericDAO{
     public Boolean inserir(Object objeto) {
         Aluno oAluno = (Aluno) objeto;
         PreparedStatement stmt = null;
-        String sql = "insert into aluno(idpessoa, ra, saldoads, situacao, permitelogin) values(?,?,?,?,?);";
+        String sql = "insert into aluno(idpessoa, ra, saldoads, situacao, permitelogin) values(?,?,?,?,?)";
         try{
          PessoaDAO oPessoaDAO = new PessoaDAO();
         int idPessoa = oPessoaDAO.cadastrar(oAluno);
 
             stmt = conexao.prepareStatement(sql);
             stmt.setInt(1, idPessoa);
-            stmt.setInt(2, oAluno.getRa());
+            stmt.setLong(2, oAluno.getRa());
             stmt.setDouble(3, oAluno.getSaldoAds());
             stmt.setString(4, oAluno.getSituacao());
             stmt.setString(5, oAluno.getPermiteLogin());
@@ -84,7 +85,7 @@ public class AlunoDAO implements GenericDAO{
             PessoaDAO oPessoaDAO = new PessoaDAO();
             oPessoaDAO.cadastrar(oAluno);
             stmt = conexao.prepareStatement(sql);
-            stmt.setInt(1, oAluno.getRa());
+            stmt.setLong(1, oAluno.getRa());
             stmt.setDouble(2, oAluno.getSaldoAds());
             stmt.setString(3, oAluno.getPermiteLogin());
             stmt.setInt(4, oAluno.getIdAluno());
@@ -146,7 +147,7 @@ public class AlunoDAO implements GenericDAO{
             while (rs.next()) {
                 oAluno = alunoVazio();
                 oAluno.setIdAluno(rs.getInt("idaluno"));
-                oAluno.setRa(rs.getInt("ra"));
+                oAluno.setRa(rs.getLong("ra"));
                 oAluno.setSaldoAds(rs.getDouble("saldoads"));
                 oAluno.setSituacao(rs.getString("situacao"));
                 oAluno.setPermiteLogin(rs.getString("permitelogin"));
@@ -176,7 +177,7 @@ public class AlunoDAO implements GenericDAO{
             while(rs.next()){
                 Aluno oAluno = alunoVazio();
                 oAluno.setIdAluno(rs.getInt("idaluno"));
-                oAluno.setRa(rs.getInt("ra"));
+                oAluno.setRa(rs.getLong("ra"));
                 oAluno.setSaldoAds(rs.getDouble("saldoads"));
                 oAluno.setSituacao(rs.getString("situacao"));
                 oAluno.setPermiteLogin(rs.getString("permitelogin"));
@@ -195,18 +196,18 @@ public class AlunoDAO implements GenericDAO{
         return resultado;
     }
     
-    public int verificarRA(Integer ra){
+     public int verificarCpf(String cpf){
         PreparedStatement stmt = null;
         ResultSet rs= null;
         int idAluno = 0;
         String sql = "Select al.* from aluno al, pessoa p "
-                + "where al.idpessoa = p.idpessoa and al.ra=?;";
+                + "where al.idpessoa = p.idpessoa and p.cpf=?;";
         try{
             stmt=conexao.prepareStatement(sql);
-            stmt.setInt(1, ra);
+            stmt.setString(1, cpf);
             rs=stmt.executeQuery();
             while(rs.next()){
-                idAluno = rs.getInt("idAluno");
+                idAluno = rs.getInt("idaluno");
             }
             return idAluno;
         }catch(SQLException ex){
@@ -214,5 +215,6 @@ public class AlunoDAO implements GenericDAO{
             return idAluno;
         }
     } 
+        
     
 }

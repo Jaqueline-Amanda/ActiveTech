@@ -63,6 +63,10 @@
                         <input type="text" class="form-control descricao" id="saldoads" name="saldoads" required value="${aluno.saldoAds}" style="text-transform: uppercase">
                     </div>
  
+ 
+                <tr><td>
+                        <input type="hidden" name="situacao" id="situacao" value="${aluno.situacao}" readonly="readonly"/>
+                </td></tr>
                      
                </div>
                     <div class="form-group col-md-1">
@@ -72,9 +76,6 @@
                             <option value="S" ${aluno.permiteLogin == 'S' ? "selected" : ""}>Sim</option>       
                         </select>    
                     </div>
-                <tr><td>
-                        <input type="hidden" name="situacao" id="situacao" value="${aluno.situacao}" readonly="readonly"/>
-                </td></tr>
                <div class="form-group">
             <button  class="btn btn-success" type="submit"  id="submit" onclick="validarCampos()">Cadastrar</button>
                     <button type="reset" class="btn btn-danger navbar-btn" id="reset" onclick="limparCampos()"><i class="fa fa-floppy-o" aria-hidden="true"></i> Limpar</button>
@@ -92,7 +93,7 @@
      });
     function validarCampos() {
         console.log("entrei na validação de campos");
-        if (document.getElementById("nome").value === '') {
+        if (document.getElementById("nome").value === "") {
                         Swal.fire({
                                 position: 'center',
                                 icon: 'error',
@@ -101,7 +102,7 @@
                                 timer: 1000
                         });
                         $("#nome").focus();
-        } else if (document.getElementById("ra").value === '') {
+        } else if (document.getElementById("ra").value === "") {
                         Swal.fire({
                                 position: 'center',
                                 icon: 'error',
@@ -128,6 +129,15 @@
                                 timer: 1000
                         });
                         $("#senha").focus();
+        }else if (document.getElementById("saldoads").value === '') {
+                        Swal.fire({
+                                position: 'center',
+                                icon: 'error',
+                                title: 'Verifique a senha!',
+                                showConfirmButton: false,
+                                timer: 1000
+                        });
+                        $("#saldoads").focus();
         }
         else {
                 gravarDados();
@@ -148,9 +158,12 @@
                                 permitelogin: $('#permitelogin').val(),
                                 nome: $('#nome').val(),
                                 login: $('#login').val(),
-                                senha: $('#senha').val()
+                                senha: $('#senha').val(),
+                                saldoads: $('#saldoads').val()
+
 
                         },
+                        
                         success:
                                 function(data) {
                                         console.log("resposta servlet->");
@@ -191,6 +204,7 @@
     $('#nome').val("");
     $('#login').val("");
     $('#senha').val("");
+    $('#saldoads').val("");
 }
 
 function carregarPessoa(v) {
@@ -207,11 +221,11 @@ function carregarPessoa(v) {
                 $('#permitelogin').val(respostaAluno.permiteLogin);
                 $('#situacao').val(respostaAluno.situacao);
                 $('#idpessoa').val(respostaAluno.idPessoa);
-                $('#cpf').val(respostaAluno.cpf);
                 $('#nome').val(respostaAluno.nome);
                 $('#login').val(respostaAluno.login);
                 $('#senha').val(respostaAluno.senha);
                 $('#ra').val(respostaAluno.ra);
+                $('#saldoads').val(respostaAluno.saldoAds);
 
             } else {
                 //se não encontrou administrador busca por pessoa somente

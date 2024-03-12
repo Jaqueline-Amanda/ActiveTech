@@ -5,12 +5,12 @@ import java.text.ParseException;
 public class Aluno extends Pessoa{
     
     private int idAluno;
-    private int ra;
+    private long ra;
     private Double saldoAds;
     private String situacao;
     private String permiteLogin;
 
-    public Aluno(int idAluno, int ra, Double saldoAds, String situacao, String permiteLogin, int idPessoa, String nome, String cpf, String login, String senha) {
+    public Aluno(int idAluno, long ra, Double saldoAds, String situacao, String permiteLogin, int idPessoa, String nome, String cpf, String login, String senha) {
         super(idPessoa, nome, cpf, login, senha);
         this.idAluno = idAluno;
         this.ra = ra;
@@ -31,13 +31,15 @@ public class Aluno extends Pessoa{
         this.idAluno = idAluno;
     }
 
-    public int getRa() {
+    public long getRa() {
         return ra;
     }
 
-    public void setRa(int ra) {
+    public void setRa(long ra) {
         this.ra = ra;
     }
+
+   
 
     public Double getSaldoAds() {
         return saldoAds;

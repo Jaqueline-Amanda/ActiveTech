@@ -25,14 +25,14 @@ public class AlunoCadastrar extends HttpServlet {
         response.setContentType("text/html;charset=iso-8859-1");
         int idPessoa = Integer.parseInt(request.getParameter("idpessoa"));
         int idAluno = Integer.parseInt(request.getParameter("idaluno"));
-        int ra = Integer.parseInt(request.getParameter("ra"));
+        long ra = Long.parseLong(request.getParameter("ra"));
         Double saldoads = Double.parseDouble(request.getParameter("saldoads"));
         String situacao = request.getParameter("situacao");
         String permiteLogin = request.getParameter("permitelogin");
         String nome = request.getParameter("nome");
-        String cpf = request.getParameter("cpf");
         String login = request.getParameter("login");
         String senha = request.getParameter("senha");
+      
         
         Aluno oAluno = alunoVazio();
         oAluno.setIdAluno(idAluno);
@@ -42,9 +42,9 @@ public class AlunoCadastrar extends HttpServlet {
         oAluno.setPermiteLogin(permiteLogin);
         oAluno.setIdPessoa(idPessoa);
         oAluno.setNome(nome);
-        oAluno.setCpf(cpf);
         oAluno.setLogin(login);
         oAluno.setSenha(senha);
+      
         try {
             GenericDAO dao = new AlunoDAO();
             if(dao.cadastrar(oAluno)) {
