@@ -26,13 +26,19 @@ create table administrador(
 );
 
 insert into administrador (idpessoa, situacao, permitelogin) values (1, 'A', 'S');
+
 create table semestre (
 	idsemestre serial primary key,
 	numsemestre varchar(20),
 	situacao varchar(1) not null
 );
 
-insert into semestre(numsemestre, situacao) values ('Primeiro Semestre', 'A');
+insert into semestre(numsemestre, situacao) values ('1º Semestre', 'A'),
+('2º Semestre', 'A'),
+('3º Semestre', 'A'),
+('4º Semestre', 'A'),
+('5º Semestre', 'A'),
+('6º Semestre', 'A');
 
 create table professor(
 	idprofessor serial primary key,
