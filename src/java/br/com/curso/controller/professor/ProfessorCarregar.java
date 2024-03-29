@@ -1,5 +1,6 @@
 package br.com.curso.controller.professor;
 
+import br.com.curso.dao.DisciplinaDAO;
 import br.com.curso.dao.GenericDAO;
 import br.com.curso.dao.ProfessorDAO;
 import java.io.IOException;
@@ -16,10 +17,12 @@ public class ProfessorCarregar extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
        response.setContentType("text/html;charset=iso-8859-1");
-        int idProfessor = Integer.parseInt(request.getParameter("idProfessor"));
         try {
             GenericDAO dao = new ProfessorDAO();
+            int idProfessor = Integer.parseInt(request.getParameter("idProfessor"));
             request.setAttribute("professor", dao.carregar(idProfessor));
+            DisciplinaDAO oDisciplinaDAO = new DisciplinaDAO();
+            request.setAttribute("disciplinas", oDisciplinaDAO.listar());
             request.getRequestDispatcher("cadastros/professor/professorCadastrar.jsp").forward(request, response);
         } catch(Exception e) {
             System.out.println("Problema no Servelet carregar professor! Erro: "+e.getMessage());

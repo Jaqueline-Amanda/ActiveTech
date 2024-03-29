@@ -194,6 +194,17 @@
         });
     }
     
+     function limparCampos() {
+    $('#idatividade').val("");
+    $('#situacao').val("");
+    $('#descricao').val("");
+    $('#status').val("");
+    $('#dataatividade').val("");
+    $('#dataprazo').val("");
+    $('#iddisciplina').val("");
+    $('#pontuacaomax').val("");
+}
+    
     function uploadFile() {
         var target = document.getElementById('target');
         target.src ="";

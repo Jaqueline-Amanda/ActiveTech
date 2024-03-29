@@ -44,6 +44,11 @@
                     </div>
                     
                     <div class="form-group col-md-8">
+                         <label for="rm" class="col-form-label">RM</label>
+                        <input type="text" class="form-control descricao" id="rm" name="rm" required value="${professor.rm}" style="text-transform: uppercase">
+                    </div>
+                    
+                    <div class="form-group col-md-8">
                         <label for="emailprofessor" class="col-form-label">E-mail</label>
                         <input type="text" class="form-control descricao" id="emailprofessor" name="emailprofessor" required value="${professor.emailProfessor}" style="text-transform: uppercase">
                     </div>
@@ -63,7 +68,18 @@
                         <input type="text" class="form-control descricao" id="formacaoprofessor" name="formacaoprofessor" required value="${professor.formacaoProfessor}" style="text-transform: uppercase">
                     </div>
                     
-                   
+                   <div class="form-group col-md-4">
+                <div class="col-form-label">Disciplina</div>
+                <select name="iddisciplina" id="iddisciplina" class="form-control">
+                    <option value="">Selecione</option>
+                    <c:forEach var="disciplina" items="${disciplinas}">
+                        <option value="${disciplina.idDisciplina}"
+                                ${professor.disciplina.idDisciplina == disciplina.idDisciplina ? "selected" : ""}>
+                            ${disciplina.nomeDisciplina}
+                        </option>
+                    </c:forEach>
+                </select>
+            </div>
                      
                </div>
                     <div class="form-group col-md-1">
@@ -102,6 +118,15 @@
                                 timer: 1000
                         });
                         $("#nome").focus();
+        }else if (document.getElementById("rm").value === '') {
+                        Swal.fire({
+                                position: 'center',
+                                icon: 'error',
+                                title: 'Verifique o RM!',
+                                showConfirmButton: false,
+                                timer: 1000
+                        });
+                        $("#rm").focus();
         } else if (document.getElementById("emailprofessor").value === '') {
                         Swal.fire({
                                 position: 'center',
@@ -138,7 +163,16 @@
                                 timer: 1000
                         });
                         $("#formacaoprofessor").focus();
-        }  
+        } else if (document.getElementById("iddisciplina").value === '') {
+                        Swal.fire({
+                                position: 'center',
+                                icon: 'error',
+                                title: 'Verifique a disciplina!',
+                                showConfirmButton: true,
+                                timer: 1000
+                        });
+                        $("#iddisciplina").focus();
+        } 
         
         else {
                 gravarDados();
@@ -154,12 +188,13 @@
                         data: {
                                 idpessoa: $('#idpessoa').val(),
                                 idprofessor: $('#idprofessor').val(),
+                                rm: $('#rm').val(),
                                 formacaoprofessor: $('#formacaoprofessor').val(),
                                 emailprofessor: $('#emailprofessor').val(),
                                 situacao: $('#situacao').val(),
                                 permitelogin: $('#permitelogin').val(),
                                 nome: $('#nome').val(),
-                             
+                                iddisciplina: $('#iddisciplina').val(),
                                 login: $('#login').val(),
                                 senha: $('#senha').val()
 
@@ -198,6 +233,7 @@
     function limparCampos() {
     $('#idprofessor').val("");
     $('#permitelogin').val("");
+    $('#rm').val("");
     $('#situacao').val("");
     $('#idpessoa').val("");
     $('#emailprofessor').val("");
@@ -205,6 +241,7 @@
     $('#login').val("");
     $('#senha').val("");
     $('#formacaoprofessor').val("");
+    $('#iddisciplina').val("");
 }
 
 /*function carregarPessoa(v) {

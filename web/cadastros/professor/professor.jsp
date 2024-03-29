@@ -36,8 +36,10 @@
                         <tr>
                                 <th align="left">ID</th>
                                 <th align="left">Nome</th>
+                                <th align="left">RM</th>
                                 <th align="left">Email</th>
                                 <th align="left">Login</th>
+                                <th align="left">Disciplina</th>
                                 <th align="left">Formação do Professor</th>
                                 <th align="right"></th>
                                 <th align="right"></th>
@@ -48,8 +50,10 @@
                             <tr>
                                 <td align="left">${professor.idProfessor}</td>
                                 <td align="left">${professor.nome}</td>
+                                <td align="left">${professor.rm}</td>
                                 <td align="left">${professor.emailProfessor}</td>
                                 <td align="left">${professor.login}</td>
+                                <td align="left">${professor.disciplina.nomeDisciplina}</td>
                                 <td align="left">${professor.formacaoProfessor}</td>
                                 <td align="center">
                                    <a href="#" id="deletar" title="Excluir"

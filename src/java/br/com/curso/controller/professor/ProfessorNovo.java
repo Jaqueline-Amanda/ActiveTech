@@ -1,5 +1,6 @@
 package br.com.curso.controller.professor;
 
+import br.com.curso.dao.DisciplinaDAO;
 import br.com.curso.model.Professor;
 import static br.com.curso.model.Professor.professorVazio;
 import java.io.IOException;
@@ -17,10 +18,12 @@ import javax.servlet.http.HttpServletResponse;
 public class ProfessorNovo extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, ParseException {
+            throws ServletException, IOException, ParseException, Exception {
         response.setContentType("text/html;charset=iso-8859-1");
         Professor oProfessor = professorVazio();
         request.setAttribute("professor", oProfessor);
+        DisciplinaDAO oDisciplinaDAO = new DisciplinaDAO();
+        request.setAttribute("disciplinas", oDisciplinaDAO.listar());
         request.getRequestDispatcher("/cadastros/professor/professorCadastrar.jsp").forward(request, response);
     }
 
@@ -40,6 +43,8 @@ public class ProfessorNovo extends HttpServlet {
             processRequest(request, response);
         } catch (ParseException ex) {
             Logger.getLogger(ProfessorNovo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(ProfessorNovo.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -57,6 +62,8 @@ public class ProfessorNovo extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (ParseException ex) {
+            Logger.getLogger(ProfessorNovo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
             Logger.getLogger(ProfessorNovo.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

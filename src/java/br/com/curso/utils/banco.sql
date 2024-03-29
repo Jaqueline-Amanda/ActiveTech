@@ -41,17 +41,6 @@ insert into semestre(numsemestre, situacao) values ('1º Semestre', 'A'),
 ('5º Semestre', 'A'),
 ('6º Semestre', 'A');
 
-create table professor(
-	idprofessor serial primary key,
-	idpessoa int unique,
-	emailprofessor varchar(50) not null,
-	formacaoprofessor varchar(30) not null,
-	situacao varchar(1) not null,
-	permitelogin varchar(1) not null,
-	constraint fk_professor_pessoa foreign key (idpessoa) references pessoa
-);
-insert into professor(idpessoa, emailprofessor, formacaoprofessor, situacao, permitelogin)
-values(1,'teste', 'teste', 'A', 'S');
 create table disciplina(
     iddisciplina serial primary key,
     nomedisciplina varchar(100) not null,
@@ -61,6 +50,19 @@ create table disciplina(
 );
 
 insert into disciplina (nomedisciplina,situacao,idsemestre) values ('Estrutura de Dados', 'A', 1);
+
+create table professor(
+	idprofessor serial primary key,
+	idpessoa int unique,
+	rm bigint not null unique,
+	emailprofessor varchar(50) not null,
+	formacaoprofessor varchar(30) not null,
+	situacao varchar(1) not null,
+	permitelogin varchar(1) not null,
+	iddisciplina int not null,
+	constraint fk_professor_pessoa foreign key (idpessoa) references pessoa,
+	constraint fk_prof_disciplina foreign key (iddisciplina) references disciplina
+);
 
 create table atividade(
 	idatividade serial primary key,

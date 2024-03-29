@@ -1,5 +1,6 @@
 package br.com.curso.dao;
 
+import br.com.curso.model.Disciplina;
 import br.com.curso.model.Professor;
 import static br.com.curso.model.Professor.professorVazio;
 import br.com.curso.utils.SingleConnection;
@@ -44,17 +45,19 @@ public class ProfessorDAO implements GenericDAO {
    public Boolean inserir(Object objeto) {
         Professor oProfessor = (Professor) objeto;
         PreparedStatement stmt = null;
-        String sql = "insert into professor(idpessoa, emailprofessor, formacaoprofessor, situacao, permitelogin) values(?,?,?,?,?);";
+        String sql = "insert into professor(idpessoa, rm, emailprofessor, formacaoprofessor, situacao, permitelogin, iddisciplina) values(?,?,?,?,?,?,?);";
         try{
          PessoaDAO oPessoaDAO = new PessoaDAO();
         int idPessoa = oPessoaDAO.cadastrar(oProfessor);
 
             stmt = conexao.prepareStatement(sql);
             stmt.setInt(1, idPessoa);
-            stmt.setString(2, oProfessor.getEmailProfessor());
-            stmt.setString(3, oProfessor.getFormacaoProfessor());
-            stmt.setString(4, oProfessor.getSituacao());
-            stmt.setString(5, oProfessor.getPermiteLogin());
+            stmt.setLong(2,oProfessor.getRm());
+            stmt.setString(3, oProfessor.getEmailProfessor());
+            stmt.setString(4, oProfessor.getFormacaoProfessor());
+            stmt.setString(5, oProfessor.getSituacao());
+            stmt.setString(6, oProfessor.getPermiteLogin());
+            stmt.setInt(7, oProfessor.getDisciplina().getIdDisciplina());
             stmt.execute();
             conexao.commit();
             return true;
@@ -75,15 +78,17 @@ public class ProfessorDAO implements GenericDAO {
     public Boolean alterar(Object objeto) {
         Professor oProfessor = (Professor) objeto;
         PreparedStatement stmt = null;
-        String sql = "update professor set emailprofessor=?, formacaoprofessor=?, permitelogin=? where idprofessor=?";
+        String sql = "update professor set rm=?, emailprofessor=?, formacaoprofessor=?, permitelogin=?, iddisciplina=? where idprofessor=?";
         try{
             PessoaDAO oPessoaDAO = new PessoaDAO();
             oPessoaDAO.alterar(oProfessor);
             stmt = conexao.prepareStatement(sql);
-            stmt.setString(1, oProfessor.getEmailProfessor());
-            stmt.setString(2, oProfessor.getFormacaoProfessor());
-            stmt.setString(3, oProfessor.getPermiteLogin());
-            stmt.setInt(4, oProfessor.getIdProfessor());
+            stmt.setLong(1, oProfessor.getRm());
+            stmt.setString(2, oProfessor.getEmailProfessor());
+            stmt.setString(3,oProfessor.getFormacaoProfessor());
+            stmt.setString(4, oProfessor.getPermiteLogin());
+            stmt.setInt(5, oProfessor.getDisciplina().getIdDisciplina());
+            stmt.setInt(6, oProfessor.getIdProfessor());
             stmt.execute();
             conexao.commit();
             return true;
@@ -142,6 +147,7 @@ public class ProfessorDAO implements GenericDAO {
             while (rs.next()) {
                 oProfessor = professorVazio();
                 oProfessor.setIdProfessor(rs.getInt("idprofessor"));
+                oProfessor.setRm(rs.getLong("rm"));
                 oProfessor.setFormacaoProfessor(rs.getString("formacaoprofessor"));
                 oProfessor.setEmailProfessor(rs.getString("emailprofessor"));
                 oProfessor.setSituacao(rs.getString("situacao"));
@@ -150,6 +156,8 @@ public class ProfessorDAO implements GenericDAO {
                 oProfessor.setNome(rs.getString("nome"));
                 oProfessor.setLogin(rs.getString("login"));
                 oProfessor.setSenha(rs.getString("senha"));
+                DisciplinaDAO oDisciplinaDAO = new DisciplinaDAO();
+                oProfessor.setDisciplina((Disciplina) oDisciplinaDAO.carregar(rs.getInt("iddisciplina")));
             }
         }catch(Exception ex){
             System.out.println("Problemas ao carregar Professor! Erro:"+ex.getMessage());
@@ -163,7 +171,7 @@ public class ProfessorDAO implements GenericDAO {
         List<Object> resultado = new ArrayList<>();
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        String sql = "select p.*, pr.idprofessor, pr.situacao, pr.permitelogin, pr.emailprofessor, pr.formacaoprofessor from professor pr, pessoa p "
+        String sql = "select p.*, pr.idprofessor, pr.rm, pr.situacao, pr.permitelogin, pr.emailprofessor, pr.formacaoprofessor, pr.iddisciplina from professor pr, pessoa p "
                 + "where pr.idpessoa = p.idpessoa order by idpessoa";
         try{
             stmt = conexao.prepareStatement(sql);
@@ -171,6 +179,7 @@ public class ProfessorDAO implements GenericDAO {
             while(rs.next()){
                 Professor oProfessor = professorVazio();
                 oProfessor.setIdProfessor(rs.getInt("idProfessor"));
+                oProfessor.setRm(rs.getLong("rm"));
                 oProfessor.setFormacaoProfessor(rs.getString("formacaoprofessor"));
                 oProfessor.setEmailProfessor(rs.getString("emailprofessor"));
                 oProfessor.setSituacao(rs.getString("situacao"));
@@ -179,6 +188,14 @@ public class ProfessorDAO implements GenericDAO {
                 oProfessor.setNome(rs.getString("nome"));
                 oProfessor.setLogin(rs.getString("login"));
                 oProfessor.setSenha(rs.getString("senha"));
+                DisciplinaDAO oDisciplinaDAO = null;
+                try{
+                    oDisciplinaDAO = new DisciplinaDAO();
+                }catch(Exception ex){
+                    System.out.println("Erro buscar disciplina"+ex.getMessage());
+                    ex.printStackTrace();
+                }
+                oProfessor.setDisciplina((Disciplina) oDisciplinaDAO.carregar(rs.getInt("iddisciplina")));
                 resultado.add(oProfessor);
             }
         }catch(SQLException ex){

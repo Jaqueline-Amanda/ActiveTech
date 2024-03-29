@@ -1,7 +1,9 @@
 package br.com.curso.controller.professor;
 
+import br.com.curso.dao.DisciplinaDAO;
 import br.com.curso.dao.GenericDAO;
 import br.com.curso.dao.ProfessorDAO;
+import br.com.curso.model.Disciplina;
 import br.com.curso.model.Professor;
 import static br.com.curso.model.Professor.professorVazio;
 import java.io.IOException;
@@ -19,11 +21,13 @@ import javax.servlet.http.HttpServletResponse;
 public class ProfessorCadastrar extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-           throws ServletException, IOException, ParseException {
+           throws ServletException, IOException, ParseException, Exception {
         response.setContentType("text/html;charset=iso-8859-1");
         int idPessoa = Integer.parseInt(request.getParameter("idpessoa"));
         int idProfessor = Integer.parseInt(request.getParameter("idprofessor"));
+        int idDisciplina = Integer.parseInt(request.getParameter("iddisciplina"));
         String formacao = request.getParameter("formacaoprofessor");
+        long rm = Long.parseLong(request.getParameter("rm"));
         String email = request.getParameter("emailprofessor");
         String situacao = request.getParameter("situacao");
         String permiteLogin = request.getParameter("permitelogin");
@@ -33,14 +37,16 @@ public class ProfessorCadastrar extends HttpServlet {
         String senha = request.getParameter("senha");
         
         Professor oProfessor = professorVazio();
+        DisciplinaDAO oDisciplina = new DisciplinaDAO();
+        oProfessor.setDisciplina((Disciplina) oDisciplina.carregar(idDisciplina));
         oProfessor.setIdProfessor(idProfessor);
         oProfessor.setFormacaoProfessor(formacao);
+        oProfessor.setRm(rm);
         oProfessor.setEmailProfessor(email);
         oProfessor.setSituacao(situacao);
         oProfessor.setPermiteLogin(permiteLogin);
         oProfessor.setIdPessoa(idPessoa);
         oProfessor.setNome(nome);
-        
         oProfessor.setLogin(login);
         oProfessor.setSenha(senha);
         try {
@@ -72,6 +78,8 @@ public class ProfessorCadastrar extends HttpServlet {
             processRequest(request, response);
         } catch (ParseException ex) {
             Logger.getLogger(ProfessorCadastrar.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(ProfessorCadastrar.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -89,6 +97,8 @@ public class ProfessorCadastrar extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (ParseException ex) {
+            Logger.getLogger(ProfessorCadastrar.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
             Logger.getLogger(ProfessorCadastrar.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
