@@ -25,19 +25,15 @@ public class ProfessorDAO implements GenericDAO {
     @Override
      public Boolean cadastrar(Object objeto) {
         Boolean retorno = false;
+         Professor oProfessor = (Professor) objeto;
         try {
-            Professor oProfessor = (Professor) objeto;
-            if (oProfessor.getIdProfessor()==0) {
-                int idProfessor = this.verificarCpf(oProfessor.getCpf());
-                if (idProfessor==0) {
-                    retorno = this.inserir(oProfessor);
-                }else{
-                    oProfessor.setIdProfessor(idProfessor);
-                    retorno = this.alterar(oProfessor);
-                }
-            } else {
-              retorno = this.alterar(oProfessor);
+           
+             if(oProfessor.getIdProfessor() == 0){
+                retorno = this.inserir(oProfessor);
+            }else{
+               retorno = this.alterar(oProfessor);
             }
+            return retorno;
         } catch (Exception ex){
             System.out.println("Problemas ao incluir professor! Erro "+ex.getMessage());            
         }
@@ -82,7 +78,7 @@ public class ProfessorDAO implements GenericDAO {
         String sql = "update professor set emailprofessor=?, formacaoprofessor=?, permitelogin=? where idprofessor=?";
         try{
             PessoaDAO oPessoaDAO = new PessoaDAO();
-            oPessoaDAO.cadastrar(oProfessor);
+            oPessoaDAO.alterar(oProfessor);
             stmt = conexao.prepareStatement(sql);
             stmt.setString(1, oProfessor.getEmailProfessor());
             stmt.setString(2, oProfessor.getFormacaoProfessor());
@@ -152,7 +148,6 @@ public class ProfessorDAO implements GenericDAO {
                 oProfessor.setPermiteLogin(rs.getString("permitelogin"));
                 oProfessor.setIdPessoa(rs.getInt("idpessoa"));
                 oProfessor.setNome(rs.getString("nome"));
-                oProfessor.setCpf(rs.getString("cpf"));
                 oProfessor.setLogin(rs.getString("login"));
                 oProfessor.setSenha(rs.getString("senha"));
             }
@@ -182,7 +177,6 @@ public class ProfessorDAO implements GenericDAO {
                 oProfessor.setPermiteLogin(rs.getString("permitelogin"));
                 oProfessor.setIdPessoa(rs.getInt("idpessoa"));
                 oProfessor.setNome(rs.getString("nome"));
-                oProfessor.setCpf(rs.getString("cpf"));
                 oProfessor.setLogin(rs.getString("login"));
                 oProfessor.setSenha(rs.getString("senha"));
                 resultado.add(oProfessor);
@@ -227,7 +221,7 @@ public class ProfessorDAO implements GenericDAO {
         return strJson;
     }
     
-    public int verificarCpf(String cpf){
+    /*public int verificarCpf(String cpf){
         PreparedStatement stmt = null;
         ResultSet rs= null;
         int idProfessor = 0;
@@ -245,6 +239,6 @@ public class ProfessorDAO implements GenericDAO {
             System.out.println("Problemas ao carregar pessoa! Erro: "+ex.getMessage());
             return idProfessor;
         }
-    } 
+    } */
         
 }

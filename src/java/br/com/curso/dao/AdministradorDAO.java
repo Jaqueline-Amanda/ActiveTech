@@ -1,13 +1,17 @@
 package br.com.curso.dao;
 
 import br.com.curso.model.Administrador;
+import static br.com.curso.model.Administrador.administradorVazio;
 import br.com.curso.utils.SingleConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class AdministradorDAO implements GenericDAO {
     
@@ -16,23 +20,18 @@ public class AdministradorDAO implements GenericDAO {
     public AdministradorDAO() throws Exception{
         conexao = SingleConnection.getConnection();
     }
-    
     @Override
     public Boolean cadastrar(Object objeto) {
-        Boolean retorno = false;
+       Boolean retorno = false;
+         Administrador oAdministrador = (Administrador) objeto;
         try {
-            Administrador oAdministrador = (Administrador) objeto;
-            if (oAdministrador.getIdAdministrador()==0) {
-                int idAdministrador = this.verificarCpf(oAdministrador.getCpf());
-                if (idAdministrador==0) {
-                    retorno = this.inserir(oAdministrador);
-                }else{
-                    oAdministrador.setIdAdministrador(idAdministrador);
-                    retorno = this.alterar(oAdministrador);
-                }
-            } else {
-              retorno = this.alterar(oAdministrador);
+           
+             if(oAdministrador.getIdAdministrador() == 0){
+                retorno = this.inserir(oAdministrador);
+            }else{
+               retorno = this.alterar(oAdministrador);
             }
+            return retorno;
         } catch (Exception ex){
             System.out.println("Problemas ao incluir administrador! Erro "+ex.getMessage());            
         }
@@ -43,15 +42,16 @@ public class AdministradorDAO implements GenericDAO {
     public Boolean inserir(Object objeto) {
         Administrador oAdministrador = (Administrador) objeto;
         PreparedStatement stmt = null;
-        String sql = "insert into administrador (idpessoa, situacao, permitelogin)"
-                + " values (?, ?, ?)";
+        String sql = "insert into administrador (idpessoa, cpf, situacao, permitelogin)"
+                + " values (?, ?, ?,?)";
         try{
             PessoaDAO oPessoaDAO = new PessoaDAO();
             int idPessoa = oPessoaDAO.cadastrar(oAdministrador);
             stmt = conexao.prepareStatement(sql);
             stmt.setInt(1, idPessoa);
-            stmt.setString(2, "A");
-            stmt.setString(3, oAdministrador.getPermiteLogin());
+            stmt.setString(2, oAdministrador.getCpf());
+            stmt.setString(3, "A");
+            stmt.setString(4, oAdministrador.getPermiteLogin());
             stmt.execute();
             conexao.commit();
             return true;
@@ -72,13 +72,14 @@ public class AdministradorDAO implements GenericDAO {
     public Boolean alterar(Object objeto) {
         Administrador oAdministrador = (Administrador) objeto;
         PreparedStatement stmt = null;
-        String sql = "update administrador set permitelogin=? where idadministrador=?";
+        String sql = "update administrador set cpf=?, permitelogin=? where idadministrador=?";
         try{
             PessoaDAO oPessoaDAO = new PessoaDAO();
-            oPessoaDAO.cadastrar(oAdministrador);
+            oPessoaDAO.alterar(oAdministrador);
             stmt = conexao.prepareStatement(sql);
-            stmt.setString(1, oAdministrador.getPermiteLogin());
-            stmt.setInt(2, oAdministrador.getIdAdministrador());
+            stmt.setString(1, oAdministrador.getCpf());
+            stmt.setString(2, oAdministrador.getPermiteLogin());
+            stmt.setInt(3, oAdministrador.getIdAdministrador());
             stmt.execute();
             conexao.commit();
             return true;
@@ -127,26 +128,27 @@ public class AdministradorDAO implements GenericDAO {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         Administrador oAdministrador = null;
-        String sql = "select * from administrador a, pessoa p "
-                + "where a.idpessoa = p.idpessoa and a.idadministrador=?";
+        String sql = "select * from administrador a, pessoa p where a.idpessoa = p.idpessoa and a.idadministrador=?;";
         try{
-            stmt=conexao.prepareStatement(sql);
+            stmt = conexao.prepareStatement(sql);
             stmt.setInt(1, idAdministrador);
             rs=stmt.executeQuery();
-            while(rs.next()){
-
-                oAdministrador = new Administrador(rs.getInt("idadministrador"),
-                                       rs.getString("permitelogin"),
-                                       rs.getString("situacao"),
-                                       rs.getInt("idpessoa"),
-                                       rs.getString("nome"),
-                                       rs.getString("cpf"),
-                                       rs.getString("login"),
-                                       rs.getString("senha"));
+            while (rs.next()) {
+                oAdministrador = administradorVazio();
+                oAdministrador.setIdAdministrador(rs.getInt("idadministrador"));
+                oAdministrador.setCpf(rs.getString("cpf"));
+                oAdministrador.setSituacao(rs.getString("situacao"));
+                oAdministrador.setPermiteLogin(rs.getString("permitelogin"));
+                oAdministrador.setIdPessoa(rs.getInt("idpessoa"));
+                oAdministrador.setNome(rs.getString("nome"));
+                oAdministrador.setLogin(rs.getString("login"));
+                oAdministrador.setSenha(rs.getString("senha"));
             }
         }catch(SQLException e){
             System.out.println("Problemas ao carregar Administrador! Erro: " + e.getMessage());
-            e.printStackTrace();
+            return false;
+        } catch (ParseException ex) {
+            Logger.getLogger(AdministradorDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return oAdministrador;
     }
@@ -157,31 +159,33 @@ public class AdministradorDAO implements GenericDAO {
         List<Object> resultado = new ArrayList<>();
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        String sql= "Select p.*, a.idadministrador, a.situacao, a.permitelogin "
+        String sql= "Select p.*, a.idadministrador, a.cpf, a.situacao, a.permitelogin "
                 + "from administrador a, pessoa p "
                 + "where a.idpessoa = p.idpessoa order by idpessoa";
         try{
             stmt = conexao.prepareStatement(sql);
-            rs = stmt.executeQuery();
-            while (rs.next()){
-
-                Administrador oAdministrador = new Administrador(rs.getInt("idadministrador"),
-                                       rs.getString("permitelogin"),
-                                       rs.getString("situacao"),
-                                       rs.getInt("idpessoa"),
-                                       rs.getString("nome"),
-                                       rs.getString("cpf"),
-                                       rs.getString("login"),
-                                       rs.getString("senha"));
+            rs=stmt.executeQuery();
+            while(rs.next()){
+                Administrador oAdministrador = administradorVazio();
+                oAdministrador.setIdAdministrador(rs.getInt("idadministrador"));
+                oAdministrador.setCpf(rs.getString("cpf"));
+                oAdministrador.setSituacao(rs.getString("situacao"));
+                oAdministrador.setPermiteLogin(rs.getString("permitelogin"));
+                oAdministrador.setIdPessoa(rs.getInt("idpessoa"));
+                oAdministrador.setNome(rs.getString("nome"));
+                oAdministrador.setLogin(rs.getString("login"));
+                oAdministrador.setSenha(rs.getString("senha"));
                 resultado.add(oAdministrador);
             }
         }catch(SQLException ex){
             System.out.println("Problemas ao listar administrador! Erro "+ex.getMessage());
+        } catch (ParseException ex) {
+            Logger.getLogger(AdministradorDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return resultado;
     }
     
-    public int verificarCpf(String cpf){
+    /*public int verificarCpf(String cpf){
         PreparedStatement stmt = null;
         ResultSet rs= null;
         int idAdministrador = 0;
@@ -199,5 +203,5 @@ public class AdministradorDAO implements GenericDAO {
             System.out.println("Problemas ao carregar pessoa! Erro: "+ex.getMessage());
             return idAdministrador;
         }
-    }      
+    }    */  
 }

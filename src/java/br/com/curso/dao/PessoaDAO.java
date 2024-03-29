@@ -17,20 +17,24 @@ public class PessoaDAO {
     public PessoaDAO() throws Exception{
         conexao = SingleConnection.getConnection();
     }
-    
+    /* @Override
+    public Boolean cadastrar(Object objeto){
+      Cidade oCidade = (Cidade) objeto;
+      Boolean retorno = false;
+      if(oCidade.getIdCidade() == 0){
+          retorno = this.inserir(oCidade);
+      }else{
+         retorno = this.alterar(oCidade);
+      }
+      return retorno;
+    }*/
     public int cadastrar(Object objeto) throws ParseException {
         Pessoa oPessoa = (Pessoa) objeto;
         int retorno = 0;
-        if (oPessoa.getIdPessoa()==0)
-        {
-            Pessoa objPessoa = this.carregarCpf(oPessoa.getCpf());
-            if (objPessoa.getIdPessoa()==0)
-                retorno = this.inserir(oPessoa);
-            else
-                retorno = objPessoa.getIdPessoa();
-        }
-        else {
-            retorno = this.alterar(oPessoa);
+        if (oPessoa.getIdPessoa()==0){
+            retorno = this.inserir(oPessoa);
+        }else{
+            retorno = oPessoa.getIdPessoa();
         }
         return retorno;
     }
@@ -40,14 +44,13 @@ public class PessoaDAO {
         PreparedStatement stmt = null;
         ResultSet rs=null;
         Integer idPessoa=null;
-        String sql = "insert into pessoa (nome, cpf, login, senha)"
-                + " values (?, ?, ?, ?) returning idpessoa";
+        String sql = "insert into pessoa (nome, login, senha)"
+                + " values (?, ?, ?) returning idpessoa";
         try{
             stmt = conexao.prepareStatement(sql);
             stmt.setString(1, oPessoa.getNome());
-            stmt.setString(2, oPessoa.getCpf());
-            stmt.setString(3, oPessoa.getLogin());
-            stmt.setString(4, oPessoa.getSenha());
+            stmt.setString(2, oPessoa.getLogin());
+            stmt.setString(3, oPessoa.getSenha());
 
             /*try  
             {  
@@ -80,14 +83,13 @@ public class PessoaDAO {
         Pessoa oPessoa = (Pessoa) objeto;
         PreparedStatement stmt = null;
         Integer idPessoa=oPessoa.getIdPessoa();
-        String sql = "update pessoa set nome=?, cpf=?,"
+        String sql = "update pessoa set nome=?,"
                 + " login=?, senha=?"
                 + " where idpessoa=?";
         try{
             stmt = conexao.prepareStatement(sql);
             stmt.setString(1, oPessoa.getNome());
-            stmt.setString(2, oPessoa.getCpf());
-            stmt.setString(3, oPessoa.getLogin());
+            stmt.setString(2, oPessoa.getLogin());
             /* try  
             {  
             String senha = Hash.toHexString(Hash.getSHA(oPessoa.getSenha()));  
@@ -96,8 +98,8 @@ public class PessoaDAO {
             catch (NoSuchAlgorithmException e){  
             System.out.println("Exception thrown for incorrect algorithm: " + e);  
             }   */
-            stmt.setString(4, oPessoa.getSenha());
-            stmt.setInt(5, oPessoa.getIdPessoa());
+            stmt.setString(3, oPessoa.getSenha());
+            stmt.setInt(4, oPessoa.getIdPessoa());
             stmt.execute();
             conexao.commit();
         } catch (SQLException e){
@@ -129,7 +131,6 @@ public class PessoaDAO {
                 
                 oPessoa = new Pessoa(rs.getInt("idpessoa"),
                                      rs.getString("nome"),
-                                     rs.getString("cpf"),
                                      rs.getString("login"),
                                      rs.getString("senha"));
             }
@@ -141,7 +142,7 @@ public class PessoaDAO {
         }   
     }
     
-    public Pessoa carregarCpf(String cpf) throws ParseException {
+    /*public Pessoa carregarCpf(String cpf) throws ParseException {
        PreparedStatement stmt = null;
        ResultSet rs = null;
        Pessoa oPessoa = null;
@@ -163,5 +164,5 @@ public class PessoaDAO {
            System.out.println("Problemas ao carregar pessoa! Erro:"+ex.getMessage());
        }
        return oPessoa;
-    }
+    }*/
 }

@@ -63,10 +63,7 @@
                         <input type="text" class="form-control descricao" id="formacaoprofessor" name="formacaoprofessor" required value="${professor.formacaoProfessor}" style="text-transform: uppercase">
                     </div>
                     
-                     <div class="form-group col-md-8">
-                        <label for="formacaoprofessor" class="col-form-label">CPF</label>
-                        <input type="text" class="form-control descricao" id="cpf" name="cpf" required value="${professor.cpf}" style="text-transform: uppercase">
-                    </div>
+                   
                      
                </div>
                     <div class="form-group col-md-1">
@@ -142,15 +139,7 @@
                         });
                         $("#formacaoprofessor").focus();
         }  
-        else if (document.getElementById("cpf").value === '') {
-                        Swal.fire({
-                                position: 'center',
-                                icon: 'error',
-                                title: 'Verifique o cpf!',
-                                showConfirmButton: false,
-                                timer: 1000
-                        });
-        } 
+        
         else {
                 gravarDados();
         }
@@ -170,7 +159,7 @@
                                 situacao: $('#situacao').val(),
                                 permitelogin: $('#permitelogin').val(),
                                 nome: $('#nome').val(),
-                                cpf: $('#cpf').unmask().val(),
+                             
                                 login: $('#login').val(),
                                 senha: $('#senha').val()
 
@@ -218,7 +207,7 @@
     $('#formacaoprofessor').val("");
 }
 
-function carregarPessoa(v) {
+/*function carregarPessoa(v) {
     var idM = v;
     var tipoPessoa = 'professor';
     console.log("Usuario = " + idM);
@@ -232,7 +221,7 @@ function carregarPessoa(v) {
                 $('#permitelogin').val(respostaProf.permiteLogin);
                 $('#situacao').val(respostaProf.situacao);
                 $('#idpessoa').val(respostaProf.idPessoa);
-                $('#cpf').val(respostaProf.cpf);
+               
                 $('#nome').val(respostaProf.nome);
                 $('#login').val(respostaProf.login);
                 $('#senha').val(respostaProf.senha);
@@ -257,7 +246,7 @@ function carregarPessoa(v) {
             }
         });
     });
-}
+}*/
 </script>       
 <%@include file="/footer.jsp" %>
 

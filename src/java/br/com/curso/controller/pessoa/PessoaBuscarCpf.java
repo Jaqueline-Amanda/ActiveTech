@@ -30,7 +30,7 @@ public class PessoaBuscarCpf extends HttpServlet {
             String cpf = request.getParameter("cpfcnpjpessoa");
             String tipoPessoa = request.getParameter("tipopessoa");
             String jsonRetorno="";
-            if (tipoPessoa.equals("administrador")){
+            /*if (tipoPessoa.equals("administrador")){
                 AdministradorDAO oAdmDAO = new AdministradorDAO();
                 
                 Administrador oAdm = (Administrador) oAdmDAO.carregar(oAdmDAO.verificarCpf(cpf));
@@ -61,7 +61,7 @@ public class PessoaBuscarCpf extends HttpServlet {
                 
                 Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
                 jsonRetorno = gson.toJson(oPessoa);
-            }
+            }*/
             
             response.setCharacterEncoding("iso-8859-1");
             response.getWriter().write(jsonRetorno);

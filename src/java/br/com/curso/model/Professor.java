@@ -10,8 +10,8 @@ public class Professor extends Pessoa {
     private String situacao;
     private String permiteLogin;
 
-    public Professor(int idProfessor, String formacaoProfessor, String emailProfessor, String situacao, String permiteLogin, int idPessoa, String nome, String cpf, String login, String senha) {
-        super(idPessoa, nome, cpf, login, senha);
+    public Professor(int idProfessor, String formacaoProfessor, String emailProfessor, String situacao, String permiteLogin, int idPessoa, String nome, String login, String senha) {
+        super(idPessoa, nome, login, senha);
         this.idProfessor = idProfessor;
         this.formacaoProfessor = formacaoProfessor;
         this.emailProfessor = emailProfessor;
@@ -20,7 +20,7 @@ public class Professor extends Pessoa {
     }
     
     public static Professor professorVazio() throws ParseException {
-        Professor oProfessor = new Professor(0,"","","A","S",0,"","","","");
+        Professor oProfessor = new Professor(0,"","","A","S",0,"","","");
         return oProfessor;
     }
     

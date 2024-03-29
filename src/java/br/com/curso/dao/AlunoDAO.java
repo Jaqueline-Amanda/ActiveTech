@@ -25,20 +25,15 @@ public class AlunoDAO implements GenericDAO{
     @Override
     public Boolean cadastrar(Object objeto) {
          Boolean retorno = false;
+         Aluno oAluno = (Aluno) objeto;
         try {
-            Aluno oAluno = (Aluno) objeto;
-            if (oAluno.getIdAluno()==0) {
-                  int idAluno = this.verificarCpf(oAluno.getCpf());
-                /*int idAluno = this.verificarRA(oAluno.getRa());*/
-                if (idAluno==0) {
-                    retorno = this.inserir(oAluno);
-                }else{
-                    oAluno.setIdAluno(idAluno);
-                    retorno = this.alterar(oAluno);
-                }
-            } else {
-              retorno = this.alterar(oAluno);
+           
+             if(oAluno.getIdAluno() == 0){
+                retorno = this.inserir(oAluno);
+            }else{
+               retorno = this.alterar(oAluno);
             }
+            return retorno;
         } catch (Exception ex){
             System.out.println("Problemas ao incluir aluno! Erro "+ex.getMessage());            
         }
@@ -83,7 +78,7 @@ public class AlunoDAO implements GenericDAO{
         String sql = "update aluno set ra=?, saldoads=?, permitelogin=? where idaluno=?";
         try{
             PessoaDAO oPessoaDAO = new PessoaDAO();
-            oPessoaDAO.cadastrar(oAluno);
+            oPessoaDAO.alterar(oAluno);
             stmt = conexao.prepareStatement(sql);
             stmt.setLong(1, oAluno.getRa());
             stmt.setDouble(2, oAluno.getSaldoAds());
@@ -138,7 +133,7 @@ public class AlunoDAO implements GenericDAO{
         PreparedStatement stmt = null;
         ResultSet rs= null;
         Aluno oAluno = null;
-        String sql="select * from aluno al, pessoa p where p.idpessoa = al.idaluno and al.idaluno=?;";
+        String sql="select * from aluno al, pessoa p where al.idpessoa = p.idpessoa and al.idaluno=?;";
 
         try{
             stmt = conexao.prepareStatement(sql);
@@ -153,7 +148,6 @@ public class AlunoDAO implements GenericDAO{
                 oAluno.setPermiteLogin(rs.getString("permitelogin"));
                 oAluno.setIdPessoa(rs.getInt("idpessoa"));
                 oAluno.setNome(rs.getString("nome"));
-                oAluno.setCpf(rs.getString("cpf"));
                 oAluno.setLogin(rs.getString("login"));
                 oAluno.setSenha(rs.getString("senha"));
             }
@@ -183,7 +177,6 @@ public class AlunoDAO implements GenericDAO{
                 oAluno.setPermiteLogin(rs.getString("permitelogin"));
                 oAluno.setIdPessoa(rs.getInt("idpessoa"));
                 oAluno.setNome(rs.getString("nome"));
-                oAluno.setCpf(rs.getString("cpf"));
                 oAluno.setLogin(rs.getString("login"));
                 oAluno.setSenha(rs.getString("senha"));
                 resultado.add(oAluno);
@@ -196,7 +189,7 @@ public class AlunoDAO implements GenericDAO{
         return resultado;
     }
     
-     public int verificarCpf(String cpf){
+     /*public int verificarCpf(String cpf){
         PreparedStatement stmt = null;
         ResultSet rs= null;
         int idAluno = 0;
@@ -214,7 +207,7 @@ public class AlunoDAO implements GenericDAO{
             System.out.println("Problemas ao carregar pessoa! Erro: "+ex.getMessage());
             return idAluno;
         }
-    } 
+    } */
         
     
 }

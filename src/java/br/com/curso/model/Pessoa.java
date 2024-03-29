@@ -5,14 +5,13 @@ public class Pessoa {
     
     private int idPessoa;
     private String nome;
-    private String cpf;
     private String login;
     private String senha;
 
-    public Pessoa(int idPessoa, String nome, String cpf, String login, String senha) {
+    public Pessoa(int idPessoa, String nome, String login, String senha) {
         this.idPessoa = idPessoa;
         this.nome = nome;
-        this.cpf = cpf;
+    
         this.login = login;
         this.senha = senha;
     }
@@ -32,15 +31,6 @@ public class Pessoa {
     public void setNome(String nome) {
         this.nome = nome;
     }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
     public String getLogin() {
         return login;
     }

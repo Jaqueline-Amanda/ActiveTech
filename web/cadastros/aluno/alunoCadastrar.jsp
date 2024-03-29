@@ -133,7 +133,7 @@
                         Swal.fire({
                                 position: 'center',
                                 icon: 'error',
-                                title: 'Verifique a senha!',
+                                title: 'Verifique o saldo!',
                                 showConfirmButton: false,
                                 timer: 1000
                         });
@@ -207,7 +207,7 @@
     $('#saldoads').val("");
 }
 
-function carregarPessoa(v) {
+/*function carregarPessoa(v) {
     var idM = v;
     var tipoPessoa = 'aluno';
     console.log("Usuario = " + idM);
@@ -236,7 +236,6 @@ function carregarPessoa(v) {
                     if (id != "0")
                     {
                         $('#idpessoa').val(respostaPessoa.idPessoa);
-                        $('#cpf').val(respostaPessoa.cpf);
                         $('#nome').val(respostaPessoa.nome);
                         $('#senha').val(respostaPessoa.senha);
                         $('#login').val(respostaPessoa.login);
@@ -245,7 +244,7 @@ function carregarPessoa(v) {
             }
         });
     });
-}
+}*/
 </script>       
 <%@include file="/footer.jsp" %>
 

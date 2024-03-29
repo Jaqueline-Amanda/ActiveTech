@@ -28,7 +28,7 @@ public class ProfessorCadastrar extends HttpServlet {
         String situacao = request.getParameter("situacao");
         String permiteLogin = request.getParameter("permitelogin");
         String nome = request.getParameter("nome");
-        String cpf = request.getParameter("cpf");
+        
         String login = request.getParameter("login");
         String senha = request.getParameter("senha");
         
@@ -40,7 +40,7 @@ public class ProfessorCadastrar extends HttpServlet {
         oProfessor.setPermiteLogin(permiteLogin);
         oProfessor.setIdPessoa(idPessoa);
         oProfessor.setNome(nome);
-        oProfessor.setCpf(cpf);
+        
         oProfessor.setLogin(login);
         oProfessor.setSenha(senha);
         try {

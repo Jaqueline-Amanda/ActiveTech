@@ -1,11 +1,11 @@
 create table pessoa (
 	idpessoa serial primary key,
 	nome varchar(100) not null,
-	cpf varchar(14) not null unique,
 	login varchar(100) not null,
 	senha varchar(128) not null
 );
-insert into pessoa(nome, cpf, login, senha) values ('Alexandre Bernardes', '49509738000', 'xexe', '123456');
+insert into pessoa(nome, login, senha) values ('Alexandre Bernardes', 'xexe', '123456');
+
 
 create table aluno(
 	idaluno serial primary key,
@@ -20,12 +20,13 @@ create table aluno(
 create table administrador(
     idadministrador serial primary key,
     idpessoa int unique,
+    cpf varchar(14) not null unique,
     situacao varchar(1) not null,
     permitelogin varchar(1) not null,
 	constraint fk_administrador_pessoa foreign key (idpessoa) references pessoa
 );
 
-insert into administrador (idpessoa, situacao, permitelogin) values (1, 'A', 'S');
+insert into administrador (idpessoa, cpf, situacao, permitelogin) values (1, '49407270840','A', 'S');
 
 create table semestre (
 	idsemestre serial primary key,
@@ -49,7 +50,8 @@ create table professor(
 	permitelogin varchar(1) not null,
 	constraint fk_professor_pessoa foreign key (idpessoa) references pessoa
 );
-
+insert into professor(idpessoa, emailprofessor, formacaoprofessor, situacao, permitelogin)
+values(1,'teste', 'teste', 'A', 'S');
 create table disciplina(
     iddisciplina serial primary key,
     nomedisciplina varchar(100) not null,
@@ -75,11 +77,11 @@ create table atividade(
 
 
 create or replace view usuario as 
-select p.idpessoa, p.nome, p.cpf, p.login, p.senha, pr.idprofessor as id, 'Professor' as tipo from pessoa p, professor pr
+select p.idpessoa, p.nome, p.login, p.senha, pr.idprofessor as id, 'Professor' as tipo from pessoa p, professor pr
 where pr.idpessoa = p.idpessoa and pr.situacao = 'A' and pr.permitelogin = 'S' 
 union 
-select p.idpessoa, p.nome, p.cpf, p.login, p.senha, a.idadministrador as id, 'Administrador' as tipo from pessoa p, administrador a 
+select p.idpessoa, p.nome, p.login, p.senha, a.idadministrador as id, 'Administrador' as tipo from pessoa p, administrador a 
 where a.idpessoa = p.idpessoa and a.situacao = 'A' and a.permitelogin = 'S'
 union
-select p.idpessoa, p.nome, p.cpf, p.login, p.senha, al.idaluno as id, 'Aluno' as tipo from pessoa p, aluno al 
+select p.idpessoa, p.nome, p.login, p.senha, al.idaluno as id, 'Aluno' as tipo from pessoa p, aluno al 
 where al.idpessoa = p.idpessoa and al.situacao = 'A' and al.permitelogin = 'S';

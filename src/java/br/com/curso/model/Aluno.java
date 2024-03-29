@@ -10,8 +10,8 @@ public class Aluno extends Pessoa{
     private String situacao;
     private String permiteLogin;
 
-    public Aluno(int idAluno, long ra, Double saldoAds, String situacao, String permiteLogin, int idPessoa, String nome, String cpf, String login, String senha) {
-        super(idPessoa, nome, cpf, login, senha);
+    public Aluno(int idAluno, long ra, Double saldoAds, String situacao, String permiteLogin, int idPessoa, String nome, String login, String senha) {
+        super(idPessoa, nome, login, senha);
         this.idAluno = idAluno;
         this.ra = ra;
         this.saldoAds = saldoAds;
@@ -19,7 +19,7 @@ public class Aluno extends Pessoa{
         this.permiteLogin = permiteLogin;
     }
     public static Aluno alunoVazio() throws ParseException {
-        Aluno oAluno = new Aluno(0,0,0.0,"A","S",0,"","","","");
+        Aluno oAluno = new Aluno(0,0,0.0,"A","S",0,"","","");
         return oAluno;
     }
 

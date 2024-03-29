@@ -19,14 +19,14 @@ public class AdministradorCadastrar extends HttpServlet {
         try{           
             int idPessoa = Integer.parseInt(request.getParameter("idpessoa"));
             int idAdministrador = Integer.parseInt(request.getParameter("idadministrador"));
-            String cpfPessoa = request.getParameter("cpfcnpjpessoa");
+            String cpf = request.getParameter("cpf");
             String nomePessoa = request.getParameter("nome");
             String login = request.getParameter("login");
             String senha = request.getParameter("senha");
             String permitelogin = request.getParameter("permitelogin");
             String situacao = request.getParameter("situacao");
             
-            Administrador oAdministrador = new Administrador(idAdministrador, permitelogin, situacao, idPessoa, nomePessoa, cpfPessoa, login, senha);
+            Administrador oAdministrador = new Administrador(idAdministrador, cpf, permitelogin, situacao, idPessoa, nomePessoa, login, senha);
             AdministradorDAO dao = new AdministradorDAO();
 
             if(dao.cadastrar(oAdministrador)){

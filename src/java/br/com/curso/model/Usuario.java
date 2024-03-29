@@ -7,7 +7,7 @@ public class Usuario {
    
     private int idUsuario;
     private String nome;
-    private String email;
+    
     private String login;
     private String senha;
     private String tipo;
@@ -19,15 +19,17 @@ public class Usuario {
         this.tipo = "";
     }
  
-    public Usuario(int idUsuario, String nome, String email, String login, String senha, String tipo, int id) {
+    public Usuario(int idUsuario, String nome, String login, String senha, String tipo, int id) {
         this.idUsuario = idUsuario;
         this.nome = nome;
-        this.email = email;
+     
         this.login = login;
         this.senha = senha;
         this.tipo = tipo;
         this.id = id;
     }
+
+ 
  
     public int getIdUsuario() {
         return idUsuario;
@@ -45,13 +47,7 @@ public class Usuario {
         this.nome = nome;
     }
  
-    public String getEmail() {
-        return email;
-    }
- 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+   
  
     public String getLogin() {
         return login;

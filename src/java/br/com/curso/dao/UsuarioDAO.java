@@ -34,7 +34,7 @@ public class UsuarioDAO {
             while (rs.next()){
                 oUsuario = new Usuario(rs.getInt("idpessoa"),
                         rs.getString("nome"),
-                        rs.getString("cpf"),
+                        
                         rs.getString("login"),
                         rs.getString("senha"),
                         rs.getString("tipo"),
@@ -62,7 +62,6 @@ public class UsuarioDAO {
             while (rs.next()) {
                 Usuario oUsuario = new Usuario(rs.getInt("idpessoa"),
                         rs.getString("nome"),
-                        rs.getString("cpf"),
                         rs.getString("login"),
                         rs.getString("senha"),
                         rs.getString("tipo"),

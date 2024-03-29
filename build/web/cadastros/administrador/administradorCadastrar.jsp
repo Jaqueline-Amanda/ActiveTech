@@ -123,8 +123,7 @@ function gravarDados() {
             idpessoa: $('#idpessoa').val(),
             senha: $('#senha').val(),
             nome: $('#nome').val(),
-            email: $('#email').val(),
-            cpfcnpjpessoa: $('#cpf').unmask().val(),
+            cpf: $('#cpf').unmask().val(),
             login: $('#login').val(),
             permitelogin: $('#permitelogin').val()
         },
@@ -171,7 +170,7 @@ function limparCampos() {
      $('#cpf').val("");
 }
     
-function carregarPessoa(v) {
+/*function carregarPessoa(v) {
     var idM = v;
     var tipoPessoa = 'administrador';
     //console.log("Usuario = " + idM);
@@ -207,7 +206,7 @@ function carregarPessoa(v) {
             }
         });
     });
-}
+}*/
     
 </script>
 
